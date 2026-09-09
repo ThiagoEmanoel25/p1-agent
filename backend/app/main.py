@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 # Precisa rodar antes de importar as rotas: o import da cadeia
 # routes -> agent -> graph instancia o ChatOpenAI, que le OPENAI_API_KEY.
-load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 from fastapi import FastAPI
 
