@@ -75,6 +75,33 @@ export default function App() {
             )
           }
 
+          if (b.kind === 'structured') {
+            const fields = [
+              ['Cidade', [b.data.city, b.data.country].filter(Boolean).join(', ')],
+              ['Temperatura', b.data.temperature_c === null ? '' : `${b.data.temperature_c} °C`],
+              ['Condição', b.data.condition ?? ''],
+              ['Observado em', b.data.observed_at ?? ''],
+              ['Fonte', b.data.source ?? ''],
+            ].filter(([, value]) => value)
+
+            return (
+              <article key={b.id} className="bloco structured-output">
+                <span className="rotulo">resultado estruturado — {b.data.status}</span>
+                <p>{b.data.answer}</p>
+                {fields.length > 0 && (
+                  <dl>
+                    {fields.map(([label, value]) => (
+                      <div key={label}>
+                        <dt>{label}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+              </article>
+            )
+          }
+
           return (
             <article key={b.id} className="bloco tool-result">
               <span className="rotulo">

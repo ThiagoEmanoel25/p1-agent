@@ -69,6 +69,20 @@ function renderTool(blocks: Block[], ev: StreamEvent): Block[] {
   }
 }
 
+/** Renderer do evento final emitido pelo formatador estruturado. */
+function renderStructuredOutput(blocks: Block[], ev: StreamEvent): Block[] {
+  const data = ev.data.structured
+  if (!data) return blocks
+
+  // O backend emite uma resposta estruturada por execução. Usamos o run_id
+  // para evitar duplicação caso o evento seja reenviado pelo stream.
+  const semRespostaAnterior = blocks.filter(
+    (block) => block.kind !== 'structured' || block.id !== ev.run_id,
+  )
+
+  return [...semRespostaAnterior, { kind: 'structured', id: ev.run_id, data }]
+}
+
 /**
  * AC-06: evento chega, checa o tipo, escolhe o renderer.
  * Tipo fora de on_chat_model_* / on_tool_* lanca erro.
@@ -76,6 +90,7 @@ function renderTool(blocks: Block[], ev: StreamEvent): Block[] {
 export function applyEvent(blocks: Block[], ev: StreamEvent): Block[] {
   if (ev.event.startsWith('on_chat_model_')) return renderChatModel(blocks, ev)
   if (ev.event.startsWith('on_tool_')) return renderTool(blocks, ev)
+  if (ev.event === 'on_structured_output') return renderStructuredOutput(blocks, ev)
 
   throw new Error(`Tipo de evento nao suportado: ${ev.event}`)
 }

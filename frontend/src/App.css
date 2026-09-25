@@ -101,6 +101,30 @@ button:disabled {
   border-color: var(--accent);
 }
 
+.structured-output {
+  border-color: var(--accent);
+}
+
+.structured-output dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.6rem 1rem;
+  margin: 0.9rem 0 0;
+}
+
+.structured-output dl div {
+  min-width: 0;
+}
+
+.structured-output dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.structured-output dd {
+  margin: 0.1rem 0 0;
+}
+
 .tool-call code,
 .tool-result pre {
   display: block;
